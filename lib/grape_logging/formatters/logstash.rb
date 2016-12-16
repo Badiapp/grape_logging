@@ -2,11 +2,13 @@ module GrapeLogging
   module Formatters
     class Logstash
       def call(severity, datetime, _, data)
-        {
+        json = {
           :'@timestamp' => datetime.iso8601,
           :'@version' => '1',
           :severity => severity
         }.merge!(format(data)).to_json
+
+        "#{json}\n"
       end
 
       private
