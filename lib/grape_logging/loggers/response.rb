@@ -10,11 +10,9 @@ module GrapeLogging
       # For example, if you POST on a PUT endpoint, response.body is egal to """".
       # It's strange but it's the Grape behavior...
       def serialized_response_body(response)
-        begin
-          response.body.map{ |body| JSON.parse(body.to_s) }
-        rescue => e
-          response.body
-        end
+        JSON.parse(response.body.first.to_s)
+      rescue => e
+        response.body
       end
     end
   end
