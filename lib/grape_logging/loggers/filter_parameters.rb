@@ -21,7 +21,7 @@ module GrapeLogging
 
       def safe_parameters(request)
         # Now this logger can work also over Rails requests
-        return clean_parameters(request.env[AD_PARAMS]) if request.params.empty?
+        return clean_parameters(request.env[AD_PARAMS] || {}) if request.params.empty?
         clean_parameters(request.params.clone)
       end
 
