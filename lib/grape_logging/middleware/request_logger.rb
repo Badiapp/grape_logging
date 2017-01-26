@@ -3,7 +3,9 @@ require 'grape/middleware/base'
 module GrapeLogging
   module Middleware
     class RequestLogger < Grape::Middleware::Base
-
+      LENGTH_EXCEEDED = { "alert": "length_exceeded",
+                           "alert_description": "Body length exceeded maximum allowed characters and was removed due to logging system constraints."
+                        }.freeze
       ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
         GrapeLogging::Timings.append_db_runtime(event)
@@ -64,6 +66,16 @@ module GrapeLogging
       end
 
       private
+
+      def validate_length(request_params)
+        if request_params[:params].to_s.length > 5000
+          request_params[:params] = LENGTH_EXCEEDED
+          request_params
+        else
+          request_params
+        end
+      end
+
       def request
         @request ||= ::Rack::Request.new(env)
       end
@@ -93,13 +105,15 @@ module GrapeLogging
       end
 
       def collect_parameters
-        parameters.tap do |params|
+        my_params = parameters.tap do |params|
           @included_loggers.each do |logger|
             params.merge! logger.parameters(request, response) do |_, oldval, newval|
               oldval.respond_to?(:merge) ? oldval.merge(newval) : newval
             end
           end
         end
+
+        validate_length(my_params)
       end
 
       def invoke_included_loggers(method_name)

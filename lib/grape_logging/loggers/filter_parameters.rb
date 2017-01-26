@@ -2,6 +2,10 @@ module GrapeLogging
   module Loggers
     class FilterParameters < GrapeLogging::Loggers::Base
       AD_PARAMS = 'action_dispatch.request.parameters'.freeze
+      REQUEST_LENGTH_EXCEEDED = { "alert": "request_length_exceeded",
+                                  "alert_description": "Request length exceeded maximum allowed characters and was removed due to logging system constraints."
+                                }.freeze
+
 
       def initialize(filter_parameters = nil, replacement = '[FILTERED]', exceptions = %w(controller action format))
         @filter_parameters = filter_parameters || (defined?(Rails.application) ? Rails.application.config.filter_parameters : [])
