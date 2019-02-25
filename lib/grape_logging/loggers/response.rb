@@ -1,6 +1,7 @@
 module GrapeLogging
   module Loggers
     class Response < GrapeLogging::Loggers::Base
+      MAX_RESPONSE_LENGTH = 100_000
       RESPONSE_LENGTH_EXCEEDED = "{\"alert\":\"response_length_exceeded\",\"alert_description\":\"Response length exceeded maximum allowed characters and was removed due to logging system constraints.\"}".freeze
 
       def parameters(_, response)
@@ -12,7 +13,7 @@ module GrapeLogging
       # For example, if you POST on a PUT endpoint, response.body is egal to """".
       # It's strange but it's the Grape behavior...
       def serialized_response_body(response)
-        if response.body.first.to_s.length > 40000
+        if response.body.first.to_s.length > MAX_RESPONSE_LENGTH
           JSON.parse(RESPONSE_LENGTH_EXCEEDED)
         else
           JSON.parse(response.body.first.to_s)
