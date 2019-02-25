@@ -1,7 +1,7 @@
 module GrapeLogging
   module Loggers
     class Response < GrapeLogging::Loggers::Base
-      MAX_RESPONSE_LENGTH = 100_000
+      MAX_RESPONSE_LENGTH = 180_000
       RESPONSE_LENGTH_EXCEEDED = "{\"alert\":\"response_length_exceeded\",\"alert_description\":\"Response length exceeded maximum allowed characters and was removed due to logging system constraints.\"}".freeze
 
       def parameters(_, response)
