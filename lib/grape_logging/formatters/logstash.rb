@@ -6,9 +6,7 @@ module GrapeLogging
           :'@timestamp' => datetime.iso8601,
           :'@version' => '1',
           :severity => severity
-        }.merge!(format(data)).to_json
-
-        "#{json}\n"
+        }.merge!(format(data)).to_json + "\n"
       end
 
       private
