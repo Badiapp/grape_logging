@@ -68,7 +68,7 @@ module GrapeLogging
       private
 
       def validate_length(request_params)
-        if request_params[:params].to_s.length > 5000
+        if request_params[:params].to_s.length > 20000
           request_params[:params] = LENGTH_EXCEEDED
           request_params
         else
