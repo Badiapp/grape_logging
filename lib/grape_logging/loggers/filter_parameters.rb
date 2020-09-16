@@ -1,6 +1,8 @@
 module GrapeLogging
   module Loggers
     class FilterParameters < GrapeLogging::Loggers::Base
+      require 'active_support/parameter_filter'
+
       AD_PARAMS = 'action_dispatch.request.parameters'.freeze
       REQUEST_LENGTH_EXCEEDED = { "alert": "request_length_exceeded",
                                   "alert_description": "Request length exceeded maximum allowed characters and was removed due to logging system constraints."
@@ -20,7 +22,7 @@ module GrapeLogging
       private
 
       def parameter_filter
-        @parameter_filter ||= ActionDispatch::Http::ParameterFilter.new(@filter_parameters)
+        @parameter_filter ||= ActiveSupport::ParameterFilter.new(@filter_parameters)
       end
 
       def safe_parameters(request)
