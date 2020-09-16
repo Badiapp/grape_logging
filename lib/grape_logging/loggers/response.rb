@@ -13,12 +13,12 @@ module GrapeLogging
       # For example, if you POST on a PUT endpoint, response.body is egal to """".
       # It's strange but it's the Grape behavior...
       def serialized_response_body(response)
-        if response.body.first.to_s.length > MAX_RESPONSE_LENGTH
+        if response.body.body.length > MAX_RESPONSE_LENGTH
           JSON.parse(RESPONSE_LENGTH_EXCEEDED)
         else
-          JSON.parse(response.body.first.to_s)
+          JSON.parse(response.body.body)
         end
-      rescue => e
+      rescue StandardError
         response.body
       end
     end
