@@ -11,7 +11,8 @@ module GrapeLogging
         GrapeLogging::Timings.append_db_runtime(event)
       end if defined?(ActiveRecord)
 
-      def initialize(app, options = {})
+      def initialize(app, **options)
+        options ||= {}
         super
 
         @included_loggers = @options[:include] || []
